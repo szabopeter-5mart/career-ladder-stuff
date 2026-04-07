@@ -1,479 +1,807 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fejlesztoi Karrierletra - Technologiai Tudas</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0e0f13;
-    --surface: #16171d;
-    --surface-hover: #1c1d25;
-    --border: #2a2b35;
-    --text: #e8e6e1;
-    --text-muted: #9895a0;
-    --accent-junior: #5bcea6;
-    --accent-mid: #4da6e8;
-    --accent-senior: #a07ee8;
-    --accent-lead: #e8a44d;
-    --accent-junior-dim: rgba(91,206,166,0.08);
-    --accent-mid-dim: rgba(77,166,232,0.08);
-    --accent-senior-dim: rgba(160,126,232,0.08);
-    --accent-lead-dim: rgba(232,164,77,0.08);
-    --accent-junior-border: rgba(91,206,166,0.2);
-    --accent-mid-border: rgba(77,166,232,0.2);
-    --accent-senior-border: rgba(160,126,232,0.2);
-    --accent-lead-border: rgba(232,164,77,0.2);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .hero {
-    padding: 80px 40px 60px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -200px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(160,126,232,0.06) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .hero h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    margin-bottom: 16px;
-    color: var(--text);
-  }
-
-  .hero p {
-    color: var(--text-muted);
-    font-size: 1.05rem;
-    max-width: 560px;
-    margin: 0 auto;
-  }
-
-  .level-nav {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 0 40px 40px;
-    flex-wrap: wrap;
-  }
-
-  .level-btn {
-    padding: 10px 24px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    letter-spacing: 0.02em;
-  }
-
-  .level-btn:hover { background: var(--surface-hover); color: var(--text); }
-  .level-btn.active[data-level="junior"] { background: var(--accent-junior-dim); border-color: var(--accent-junior-border); color: var(--accent-junior); }
-  .level-btn.active[data-level="mid"] { background: var(--accent-mid-dim); border-color: var(--accent-mid-border); color: var(--accent-mid); }
-  .level-btn.active[data-level="senior"] { background: var(--accent-senior-dim); border-color: var(--accent-senior-border); color: var(--accent-senior); }
-  .level-btn.active[data-level="lead"] { background: var(--accent-lead-dim); border-color: var(--accent-lead-border); color: var(--accent-lead); }
-
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 40px 80px;
-  }
-
-  .category {
-    margin-bottom: 48px;
-    animation: fadeUp 0.5s ease both;
-  }
-
-  .category-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 8px;
-  }
-
-  .category-number {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.8rem;
-    color: var(--text-muted);
-    opacity: 0.3;
-    line-height: 1;
-  }
-
-  .category-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--text);
-  }
-
-  .category-note {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 20px;
-    padding-left: 48px;
-    font-style: italic;
-  }
-
-  .level-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .level-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px 28px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .level-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    border-radius: 3px 0 0 3px;
-  }
-
-  .level-card[data-level="junior"]::before { background: var(--accent-junior); }
-  .level-card[data-level="mid"]::before { background: var(--accent-mid); }
-  .level-card[data-level="senior"]::before { background: var(--accent-senior); }
-  .level-card[data-level="lead"]::before { background: var(--accent-lead); }
-
-  .level-card.hidden {
-    display: none;
-  }
-
-  .level-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    display: inline-block;
-  }
-
-  .level-card[data-level="junior"] .level-label { color: var(--accent-junior); }
-  .level-card[data-level="mid"] .level-label { color: var(--accent-mid); }
-  .level-card[data-level="senior"] .level-label { color: var(--accent-senior); }
-  .level-card[data-level="lead"] .level-label { color: var(--accent-lead); }
-
-  .level-card p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    line-height: 1.75;
-  }
-
-  .growth-section {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-  }
-
-  .growth-title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-    opacity: 0.6;
-  }
-
-  .growth-item {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.04);
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin-bottom: 8px;
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    line-height: 1.7;
-  }
-
-  .growth-item:last-child { margin-bottom: 0; }
-
-  .growth-arrow {
-    font-weight: 700;
-    margin-right: 6px;
-  }
-
-  .growth-item[data-to="mid"] .growth-arrow { color: var(--accent-mid); }
-  .growth-item[data-to="senior"] .growth-arrow { color: var(--accent-senior); }
-  .growth-item[data-to="lead"] .growth-arrow { color: var(--accent-lead); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .category:nth-child(1) { animation-delay: 0s; }
-  .category:nth-child(2) { animation-delay: 0.07s; }
-  .category:nth-child(3) { animation-delay: 0.14s; }
-  .category:nth-child(4) { animation-delay: 0.21s; }
-  .category:nth-child(5) { animation-delay: 0.28s; }
-
-  @media (max-width: 640px) {
-    .hero { padding: 48px 20px 40px; }
-    .level-nav { padding: 0 20px 32px; }
-    .container { padding: 0 20px 60px; }
-    .level-card { padding: 20px 22px; }
-    .category-note { padding-left: 0; }
-  }
-</style>
-</head>
-<body>
-
-<div class="hero">
-  <h1>Fejlesztoi Karrierletra</h1>
-  <p>Technologiai tudas alapu szintrendszer, a junior szinttol a lead pozicioig</p>
-</div>
-
-<div class="level-nav">
-  <button class="level-btn active" data-level="all" onclick="filterLevel('all')">Osszes szint</button>
-  <button class="level-btn" data-level="junior" onclick="filterLevel('junior')">Junior</button>
-  <button class="level-btn" data-level="mid" onclick="filterLevel('mid')">Mid-level</button>
-  <button class="level-btn" data-level="senior" onclick="filterLevel('senior')">Senior</button>
-  <button class="level-btn" data-level="lead" onclick="filterLevel('lead')">Lead</button>
-</div>
-
-<div class="container">
-
-  <!-- 1. Alapveto informatikai ismeretek -->
-  <div class="category">
-    <div class="category-header">
-      <span class="category-number">01</span>
-      <h2 class="category-title">Alapveto informatikai ismeretek</h2>
-    </div>
-    <div class="level-cards">
-
-      <div class="level-card" data-level="junior">
-        <div class="level-label">Junior</div>
-        <p>Ismeri es helyesen hasznalja az alapveto adatstrukturakat (tombok, objektumok/map-ek, halmazok, kulcs-ertek parok). Vilagos bemenettel es kimenettel rendelkezo fuggvenyeket ir, erti a scope-ot es az aszinkron mukodest a sajat nyelveben. Felszini szinten latja az algoritmikus bonyolultsagot: felismeri, ha egy brute-force megoldas teljesitmenyproblemahoz vezet, meg ha formalis analizist nem is vegez. A tipusrendszert vagy a nyelv konvencioit hasznositja, nem pedig kuzdeni probal ellenuk.</p>
-      </div>
-
-      <div class="level-card" data-level="mid">
-        <div class="level-label">Mid-level</div>
-        <p>Tudatos adatmodellezesi donteseket hoz: a problemanak megfelelo strukturat valasztja ahelyett, hogy az elso mukodo megoldasnal maradna. Felismeri a stack-jeben megjeleno tervezesi mintakat: kompozicio, middleware lancok, hook/filter rendszerek, dependency injection, observer minta. Az alkalmazas allapotkezeleset es adatfolyamat logikajat kepes atlatni anelkul, hogy az osszekuszalodna. A rekurziot, a memoizaciot es az alapveto cache logikakat ertelmesen alkalmazza, amikor a teljesitmeny ezt megkivanja.</p>
-      </div>
-
-      <div class="level-card" data-level="senior">
-        <div class="level-label">Senior</div>
-        <p>Ez a kategoria itt eri el a maximumat. Az informatikai alapismeretek belsove valtak, es csendben informaljak a donteseket. Felismeri, ha egy teljesitmenyproblem algoritmikus vagy architekturalis termeszetu. Tudja, mikor indokolt egyedi megoldas, es mikor jobb egy konyvtarra hagyatkozni. A kod review soran az implementacios reszleteken tulmenoen strukturalis problemakat is kiszur.</p>
-      </div>
-
-      <div class="growth-section">
-        <div class="growth-title">Fejlodesi jelzok</div>
-        <div class="growth-item" data-to="mid">
-          <span class="growth-arrow">Junior &#8594; Mid:</span> Mar nem az elso mukodo megoldasnal all meg, hanem megkozelitesek kozott valaszt es meg tudja indokolni. Ez a PR leirasokban es a kod review-kban lathato: nemcsak azt irja le, mit csinalt, hanem azt is, miert.
-        </div>
-        <div class="growth-item" data-to="senior">
-          <span class="growth-arrow">Mid &#8594; Senior:</span> A mintakat nem alkalmazando receptkent kezeli, hanem a jo struktura termeszetes kovetkezmenyekent latja. A review-k soran architekturalis problemakat fog meg, nem csak felszini implementacios hibakat.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2. Stack domain tudas -->
-  <div class="category">
-    <div class="category-header">
-      <span class="category-number">02</span>
-      <h2 class="category-title">Tech stack domain tudas</h2>
-    </div>
-    <div class="level-cards">
-
-      <div class="level-card" data-level="junior">
-        <div class="level-label">Junior</div>
-        <p>Oldalakat, komponenseket es layoutokat epit a csapat keretrendszereben, a meglevo projekt konvencioit kovetve. Erti a framework alapkoncepcioait (routing, template-ek, adatlekerdezes, renderelesi eletciklus) annyira, hogy a kialakult mintakon belul dolgozzon. Kepes a csapat CMS rendszerevel dolgozni: tartalomtipusok letrehozasa es szerkesztese, mezok es alapveto kapcsolatok konfiguracia, illetve annak megertese, hogyan jut el a tartalom a CMS-bol a frontendre. Koveti a projekt stilusmegoldasait es a meglevo komponens- vagy sablonmintakat.</p>
-      </div>
-
-      <div class="level-card" data-level="mid">
-        <div class="level-label">Mid-level</div>
-        <p>Architekturalis mikrodonteseket onalloan hoz: renderelesi strategiat, adatlekeresi megkozelitest es cache konfiguraciot az oldal tenyleges igenyei alapjan valaszt, es meg tudja indokolni. Uj projektekhez a nullarol epit CMS konfiguraciot: egyedi tartalomtipusok, eletciklus hook-ok vagy filterek, hozzaferesi jogosultsagok, es egyedi API vegpontok, ha az alap feluleten nem oldhatoak meg az igenyek. Erti, hogyan kommunikal a CMS az adatbazissal, es hogyan irjon hatekony lekerdezeseket tulzott adatlekerdezes nelkul. Magabiztosan kezeli a szokasos CMS munkafolyamatokat: tobbnyelvu tartalom, piszkozat/publikacio, mediakezelest es tartalom-kapcsolatok.</p>
-      </div>
-
-      <div class="level-card" data-level="senior">
-        <div class="level-label">Senior</div>
-        <p>O az, akit a csapat megkeres, ha valami ugy torik el, ahogy a dokumentacioja nem fedi le. Erti a keretrendszer mukodesi logikaját: build folyamat, cache viselkedes, szerver oldali vegrehajtasi modell, teljesitmenyprofilozas. A CMS oldalan a bovitmeny/plugin architekturan tud fejleszteni, az admin feluletet testreszabni es verziok kozotti adatmigraciot kezelni. Koveti a keretrendszer es a CMS kiadasait, es a valtozaslistakat konkret utmutatassa alakitja: "ez a kiadas azt jelenti, hogy uj projektekben az X-et maskepp kell kezelnunk."</p>
-      </div>
-
-      <div class="level-card" data-level="lead">
-        <div class="level-label">Lead</div>
-        <p>A stack kanonikus projektbeallitasanak tulajdonosa: a kezdo repo, az alapertelmezett CMS konfiguracio, a mappastruktura konvenciok es a deployment pipeline, amellyel minden uj projekt indul. Ertekelni a keretrendszer es a CMS uj funkcioit, es el donti, mi kerul ugynoksegi szinten bevezetsre es mi kerul halasztasra. Ha barmelyik eszkoz jelentos iranyvaltozason megy at, a lead tervezi meg az ugynokseg valaszat: idovonal, migracios strategia, kepzesi igenyek. Mindent azon a szuron at enged, hogy "ettol javul-e a szabvanyos munkamennetunk?"</p>
-      </div>
-
-      <div class="growth-section">
-        <div class="growth-title">Fejlodesi jelzok</div>
-        <div class="growth-item" data-to="mid">
-          <span class="growth-arrow">Junior &#8594; Mid:</span> A meglevo konfiguraciok kovetese helyett maga epit konfiguraciokat. A teszt az, hogy kepese egy uj projekt CMS es keretrendszer strukturajat a nullarol felepiteni ugy, hogy az megfelel az ugynokseg szabvanyainak.
-        </div>
-        <div class="growth-item" data-to="senior">
-          <span class="growth-arrow">Mid &#8594; Senior:</span> A helyes epitestol a diagnosztizalas es donteshozas fele lep tovabb. Olyan problemakat old meg, amiket masok nem tudnak, es olyan velemenyt formaz a stack-rol, ami vegul helyesnek bizonyul.
-        </div>
-        <div class="growth-item" data-to="lead">
-          <span class="growth-arrow">Senior &#8594; Lead:</span> Az egyeni szakeretlmtol az intezmenyi gondoskodas fele mozdul el. Tudasa a csapat eszkozokban es sablonokban el, nem csupan a sajat fejeben.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. Kulso eszkozok es szolgaltatasok -->
-  <div class="category">
-    <div class="category-header">
-      <span class="category-number">03</span>
-      <h2 class="category-title">Kulso eszkozok es szolgaltatasok ismerete</h2>
-    </div>
-    <div class="category-note">Ez a kategoria mid-level szinttol indul. Juniorok a mar beallitott szolgaltatasokat hasznaljak, es nem elvart toluk, hogy szolgaltatasokat ertekeljenek vagy valasszanak.</div>
-    <div class="level-cards">
-
-      <div class="level-card" data-level="mid">
-        <div class="level-label">Mid-level</div>
-        <p>Munkatapasztalattal rendelkezik az ugynokseg altal gyakran integralt szolgaltatasokkal: analitikai platformok, email szolgaltatasok, urlap kezelo rendszerek, autentifikacios szolgaltatok, CDN-ek es kepoptimalizalo megoldasok. Egy integraciot a szolgaltatas dokumentacioja alapjan kepes megvalositani, anelkul, hogy az API kulcsok, webhook-ok vagy SDK beallitas soran kezenfogva kellene vezetni. Kepes felmerni, hogy egy szolgaltatas arazonas megfelelo-e az adott ugyfelmeret szamara.</p>
-      </div>
-
-      <div class="level-card" data-level="senior">
-        <div class="level-label">Senior</div>
-        <p>Fejben tartja az ugynokseg projektjeihez relevans szolgaltatasok terkepet. Ha ugyfeligenykent felmerul a kereses, webshop, idopontfoglalas, tranzakcios email vagy fizeteskezeles, realis opciókat tud javasolni, kifejtve az elonyoket es hatranyokat (koltseg, bonyolultsag, vendor lock-in, kompatibilitas a stack-kel), es ajanlast tesz. Melyen erti a hosting es infrastruktura valasztasokat: az ugynokseg alapertelmezett hosting szolgaltatojanak aramodelljet es korlatait, azt, mikor tartozik egy projekt mashova, es hogyan kell kornyezeteket, elozeteseket es edge/serverless fuggvenyeket konfiguralni. Eleg szolgaltatassal szerzett rossz tapasztalatot, hogy tudja, melyeket erdemes kerulni.</p>
-      </div>
-
-      <div class="level-card" data-level="lead">
-        <div class="level-label">Lead</div>
-        <p>Ez a kategoria itt eri el a maximumat, de a lead szerepe kuralas jellebu, nem hands-on. Karbantart egy "alapertelmezett szolgaltatasok" listat, amelyet a csapat hasznal, amig nincs konkret ok az elteresre. Ha egy szolgaltatas, amelyre az ugynokseg tamaszkodik, arat valtoztat, funkciot megszuntet vagy felvasaroljak, a lead meri fel a hatast es donti el, szukseges-e migracio. Uj szolgaltatasokat a lead hagyja jova, mielott bekerulnenek az ugynokseg eszkozaraba: nem minden fejleszto vezet be onalloan uj kulso fuggoseget.</p>
-      </div>
-
-      <div class="growth-section">
-        <div class="growth-title">Fejlodesi jelzok</div>
-        <div class="growth-item" data-to="senior">
-          <span class="growth-arrow">Mid &#8594; Senior:</span> A "meg tudom csinalni az integraciot, ha megmondod melyiket hasznaljam" helyett "itt vannak a lehetosegek, en ezt valasztanam es ezert." A valtast a vegrehajtastol az ajanlasteves fele jelzi.
-        </div>
-        <div class="growth-item" data-to="lead">
-          <span class="growth-arrow">Senior &#8594; Lead:</span> A projekt szintu ajanlasokbol ugynokseg szintu kuralas lesz. Eszreveszi, ha a csapat ugyanazt a szolgaltatas-kategoriat minden projekten ujra es ujra ujratekelni, es szabvanyt vezet be.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. Projekt tamogatas -->
-  <div class="category">
-    <div class="category-header">
-      <span class="category-number">04</span>
-      <h2 class="category-title">Projekt tamogatas (frissitesek, elo javitasok, karbantartas)</h2>
-    </div>
-    <div class="category-note">Ez a kategoria mid-level szinttol indul. Juniorok aktiv fejleszteseken dolgoznak, nem mar atadott projektek karbantartasan.</div>
-    <div class="level-cards">
-
-      <div class="level-card" data-level="mid">
-        <div class="level-label">Mid-level</div>
-        <p>Rutinszeru tamogatasi feladatokat kezel elo projekteken: tartalommodell modositasok, hibajavitasok, kisebb uj funkciok es fuggoseg-frissitesek, amelyek nem jarnak breaking change-dzsel. Erti a kulonbseget a fejlesztoi branch-en vegzett munka es a produkcios hotfix kozott, es a megfelelo folyamatot koveti. Kepes egy olyan kodbazisban tajekozodni, amelyet nem o epitett, eszszeru idon belul, es celzott valtoztatast vegezni regresszio bevezetese nelkul. Ellenorzi, milyen keretrendszer- es CMS-verzioval fut a projekt, mielott a jelenlegi verziohoz tartozo mintakat feltetelezne.</p>
-      </div>
-
-      <div class="level-card" data-level="senior">
-        <div class="level-label">Senior</div>
-        <p>Proaktivan felmeri az altalal erintett projektek technikai allapotat. Amikor egy regebbi projekthez rendelik, ertekelni: milyen verziokon fut, vannak-e ismert sebezhetosegek, hasznal-e elavult mintakat, amelyek a kovetkezo foverzio-frissitesnel eltorik. Frissitesi ajanlasokat tesz vilagos indoklassal: nem azt mondja, hogy "ez regi," hanem hogy "ennek a verzionak harom honapon belul megszunik a biztonsagi tamogatasa" vagy "a kliens altal kert funkcio az aktualis verzion trivialis, de ezen a verzion korulmenyesen megoldhato." Nem trivialis frissiteseket tervez es hajt vegre: fobb CMS verzio-migraciok adat- vagy semavaltozasokkal, keretrendszer verziovaltas es osszehangolt fuggoseglanc-frissitesek.</p>
-      </div>
-
-      <div class="level-card" data-level="lead">
-        <div class="level-label">Lead</div>
-        <p>Az ugynokseg projektportfoliojanak karbantartasi helyzeteert felel. Latja, melyik projekt milyen verzion fut, es melyik kozelit kockazati kuszoboket: biztonsagi tamogatas vege, halmozodo technikai adossag, ugyfelterv, amely utkozni fog az elavult infrastrukturaval. Letrehozza azt a folyamatot, ahogyan a karbantartas felszinre kerul es ido kerul ra, legyen az idoszakos audit, nyomonkoveto eszkoz vagy egy egyszeru nyilvantartas. Meghatározza, hogyan kommunikaljak az ugyfeleknek a frissitesi javaslatokat, beleertve a scope-olas es koltsegbecsles szabvanyait. Gondoskodik arrol, hogy az ugynokseg ne halmozzon fel olyan projekteket, amelyekhez senki nem akar hozzanyulni, mert tul messzire sodrodtak az aktualis stack-tol.</p>
-      </div>
-
-      <div class="growth-section">
-        <div class="growth-title">Fejlodesi jelzok</div>
-        <div class="growth-item" data-to="senior">
-          <span class="growth-arrow">Mid &#8594; Senior:</span> A reaktiv tamogatasbol (bejelentett hibak javitasa) proaktiv felmeresbe lep at (felismeri, mit kellene javitani, mielott bejelentik). A lathato jel az, hogy onalloan kezd frissitesi javaslatokat benyujtani.
-        </div>
-        <div class="growth-item" data-to="lead">
-          <span class="growth-arrow">Senior &#8594; Lead:</span> Az egyes projektek felmersebol a portfolio szintu iranyitasba lep. Felallitja azt a rendszert, amelyik biztositja, hogy semmi ne essen ki a figyelem kozepontjabol, ahelyett, hogy szemelyesen fogna meg minden problemat.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. Ujrafelhaszalhatosag -->
-  <div class="category">
-    <div class="category-header">
-      <span class="category-number">05</span>
-      <h2 class="category-title">Fejlesztett funkciok ujrafelhasznalatosaga</h2>
-    </div>
-    <div class="category-note">Ez a kategoria mid-level szinttol indul. Juniorok meg a mukodo megoldasok epiteset tanuljak; az ujrahasznalatossag ennel a szintnel korai elvaras lenne.</div>
-    <div class="level-cards">
-
-      <div class="level-card" data-level="mid">
-        <div class="level-label">Mid-level</div>
-        <p>Olyan komponenseket, sablonokat es segedfuggvenyeket ir, amelyek egy projekten belul ujrafelhasznahatoak. Nem masolja ugyan azt a layout logikát vagy tartalom-strukturat tobb helyre, hanem kiemeli kozos komponensbe. A CMS tartalomtipusait es mezocsoportjait ugy strukturalja, hogy azok kombinalhatoak legyenek, ne duplikalodjanak. Ha megold egy problemat, a megoldas eleg tiszta ahhoz, hogy a projekten dolgozo masik fejleszto atvezetetes nelkul is hasznalni tudja. Koveti a projekt konvencioit, hogy hol elnek a kozos kodok.</p>
-      </div>
-
-      <div class="level-card" data-level="senior">
-        <div class="level-label">Senior</div>
-        <p>Projekteken ativamente gondolkodik. Ha az egyik projekten olyat epit, ami visszatero problemat old meg (egy tartalom-blokk minta, egy plugin konfiguracio, egy utility az elonezet, atiranyitas vagy SEO metadata kezelesehez), azt olyan forman emeli ki, hogy a kovetkezo projekten is felhasznalhato legyen. Hozzajarul az ugynokseg belso ujrahasznalatositasi konyvtarahoz, legyen az kozos csomag, dokumentalt recept, vagy a kezdo sablon kiegeszitese. A kulonbseg a mid-level-hez kepest: az ujrahasznalatossag mar az indulaskor tudatos, nem utolag illik ra. A jovo projektjeit szem elott tartva tervez, anelkul, hogy tulbonyolitana olyan esetekre, amelyek sosem jonnek el.</p>
-      </div>
-
-      <div class="level-card" data-level="lead">
-        <div class="level-label">Lead</div>
-        <p>Az ujrahasznositas strategiajat hatarozza meg: mit es hogyan erdemes ujrahasznalatossitani. Nem mindenbol kell kozos konyvtarat csinalni. A lead donti el, melyek azok a mintak, amelyek eleg stabilak a szabvanyositashoz, melyek fejlodnek meg es inkabb dokumentalt receptkent eljek, es melyek tul projekt-specifikusak az altalanosatashoz. Karbantartja a kezdo sablont es a kozos eszkozoket, felulvizsgalja a hozzajarulasokat, hogy megbizhatoak es karbantarthatoak-e. A lead ujrahasznalatossagi hozzajarulasa strukturalis: maga a projekt architektura ugy van tervezve, hogy az ujrahasznalatositast segitso kodnak legyen nyilvanvalo helye es modja a jovoben felmerul projektekben.</p>
-      </div>
-
-      <div class="growth-section">
-        <div class="growth-title">Fejlodesi jelzok</div>
-        <div class="growth-item" data-to="senior">
-          <span class="growth-arrow">Mid &#8594; Senior:</span> A "nem ismetlem magam egy projekten belul" szemleletbol "eszrevettem, hogy minden projekten megoldjuk ezt a problemat, ezert hordozhatova tettem" szemleletbe lep. A bizonyitek kezhato: egy megosztott komponens, egy dokumentalt minta, egy sablon-kiegeszites, amit masik fejleszto tenylegesen hasznalt egy kulonbozo projekten.
-        </div>
-        <div class="growth-item" data-to="lead">
-          <span class="growth-arrow">Senior &#8594; Lead:</span> Az ujrahasznalatositasi elemek hozzajarulasabol a rendszer kuralasaba lep. Meghatarozza, mit tartalmaz a kozos eszkoztar, visszavonja, ami nem huzza a sullyat, es gondoskodik arrol, hogy a megosztott eroforrasok karban legyenek tartva es kompatibilisek maradjanak az aktualis stack-kel.
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<script>
-  function filterLevel(level) {
-    document.querySelectorAll('.level-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.level === level);
-    });
-
-    document.querySelectorAll('.level-card').forEach(card => {
-      if (level === 'all') {
-        card.classList.remove('hidden');
-      } else {
-        card.classList.toggle('hidden', card.dataset.level !== level);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fejlesztői Karrierlétra - Technológiai Tudás</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0e0f13;
+        --surface: #16171d;
+        --surface-hover: #1c1d25;
+        --border: #2a2b35;
+        --text: #e8e6e1;
+        --text-muted: #9895a0;
+        --accent-junior: #5bcea6;
+        --accent-mid: #4da6e8;
+        --accent-senior: #a07ee8;
+        --accent-lead: #e8a44d;
+        --accent-junior-dim: rgba(91, 206, 166, 0.08);
+        --accent-mid-dim: rgba(77, 166, 232, 0.08);
+        --accent-senior-dim: rgba(160, 126, 232, 0.08);
+        --accent-lead-dim: rgba(232, 164, 77, 0.08);
+        --accent-junior-border: rgba(91, 206, 166, 0.2);
+        --accent-mid-border: rgba(77, 166, 232, 0.2);
+        --accent-senior-border: rgba(160, 126, 232, 0.2);
+        --accent-lead-border: rgba(232, 164, 77, 0.2);
       }
-    });
-  }
-</script>
 
-</body>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .hero {
+        padding: 80px 40px 60px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -200px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(160, 126, 232, 0.06) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .hero h1 {
+        font-family: "DM Serif Display", serif;
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        margin-bottom: 16px;
+        color: var(--text);
+      }
+
+      .hero p {
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        max-width: 560px;
+        margin: 0 auto;
+      }
+
+      .level-nav {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 40px 40px;
+        flex-wrap: wrap;
+      }
+
+      .level-btn {
+        padding: 10px 24px;
+        border-radius: 100px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-muted);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 0.02em;
+      }
+
+      .level-btn:hover {
+        background: var(--surface-hover);
+        color: var(--text);
+      }
+      .level-btn.active[data-level="junior"] {
+        background: var(--accent-junior-dim);
+        border-color: var(--accent-junior-border);
+        color: var(--accent-junior);
+      }
+      .level-btn.active[data-level="mid"] {
+        background: var(--accent-mid-dim);
+        border-color: var(--accent-mid-border);
+        color: var(--accent-mid);
+      }
+      .level-btn.active[data-level="senior"] {
+        background: var(--accent-senior-dim);
+        border-color: var(--accent-senior-border);
+        color: var(--accent-senior);
+      }
+      .level-btn.active[data-level="lead"] {
+        background: var(--accent-lead-dim);
+        border-color: var(--accent-lead-border);
+        color: var(--accent-lead);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 40px 80px;
+      }
+
+      .category {
+        margin-bottom: 48px;
+        animation: fadeUp 0.5s ease both;
+      }
+
+      .category-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 8px;
+      }
+
+      .category-number {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.8rem;
+        color: var(--text-muted);
+        opacity: 0.3;
+        line-height: 1;
+      }
+
+      .category-title {
+        font-family: "DM Serif Display", serif;
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: var(--text);
+      }
+
+      .category-note {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 20px;
+        padding-left: 48px;
+        font-style: italic;
+      }
+
+      .level-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .level-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px 28px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .level-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        border-radius: 3px 0 0 3px;
+      }
+
+      .level-card[data-level="junior"]::before {
+        background: var(--accent-junior);
+      }
+      .level-card[data-level="mid"]::before {
+        background: var(--accent-mid);
+      }
+      .level-card[data-level="senior"]::before {
+        background: var(--accent-senior);
+      }
+      .level-card[data-level="lead"]::before {
+        background: var(--accent-lead);
+      }
+
+      .level-card.hidden {
+        display: none;
+      }
+
+      .level-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        display: inline-block;
+      }
+
+      .level-card[data-level="junior"] .level-label {
+        color: var(--accent-junior);
+      }
+      .level-card[data-level="mid"] .level-label {
+        color: var(--accent-mid);
+      }
+      .level-card[data-level="senior"] .level-label {
+        color: var(--accent-senior);
+      }
+      .level-card[data-level="lead"] .level-label {
+        color: var(--accent-lead);
+      }
+
+      .level-card p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.75;
+      }
+
+      .growth-section {
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+      }
+
+      .growth-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+        opacity: 0.6;
+      }
+
+      .growth-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 8px;
+        padding: 14px 18px;
+        margin-bottom: 8px;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.7;
+      }
+
+      .growth-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .growth-arrow {
+        font-weight: 700;
+        margin-right: 6px;
+      }
+
+      .growth-item[data-to="mid"] .growth-arrow {
+        color: var(--accent-mid);
+      }
+      .growth-item[data-to="senior"] .growth-arrow {
+        color: var(--accent-senior);
+      }
+      .growth-item[data-to="lead"] .growth-arrow {
+        color: var(--accent-lead);
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .category:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .category:nth-child(2) {
+        animation-delay: 0.07s;
+      }
+      .category:nth-child(3) {
+        animation-delay: 0.14s;
+      }
+      .category:nth-child(4) {
+        animation-delay: 0.21s;
+      }
+      .category:nth-child(5) {
+        animation-delay: 0.28s;
+      }
+
+      @media (max-width: 640px) {
+        .hero {
+          padding: 48px 20px 40px;
+        }
+        .level-nav {
+          padding: 0 20px 32px;
+        }
+        .container {
+          padding: 0 20px 60px;
+        }
+        .level-card {
+          padding: 20px 22px;
+        }
+        .category-note {
+          padding-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <h1>Fejlesztői Karrierlétra</h1>
+      <p>
+        Technológiai tudás alapú szintrendszer, a junior szinttől a lead
+        pozícióig
+      </p>
+    </div>
+
+    <div class="level-nav">
+      <button
+        class="level-btn active"
+        data-level="all"
+        onclick="filterLevel('all')"
+      >
+        Összes szint
+      </button>
+      <button
+        class="level-btn"
+        data-level="junior"
+        onclick="filterLevel('junior')"
+      >
+        Junior
+      </button>
+      <button class="level-btn" data-level="mid" onclick="filterLevel('mid')">
+        Mid-level
+      </button>
+      <button
+        class="level-btn"
+        data-level="senior"
+        onclick="filterLevel('senior')"
+      >
+        Senior
+      </button>
+      <button class="level-btn" data-level="lead" onclick="filterLevel('lead')">
+        Lead
+      </button>
+    </div>
+
+    <div class="container">
+      <!-- 1. Alapvető informatikai ismeretek -->
+      <div class="category">
+        <div class="category-header">
+          <span class="category-number">01</span>
+          <h2 class="category-title">Alapvető informatikai ismeretek</h2>
+        </div>
+        <div class="level-cards">
+          <div class="level-card" data-level="junior">
+            <div class="level-label">Junior</div>
+            <p>
+              Ismeri és helyesen használja az alapvető adatstruktúrákat (tömbök,
+              objektumok/map-ek, halmazok, kulcs-érték párok). Világos
+              bemenettel és kimenettel rendelkező függvényeket ír, érti a
+              scope-ot és az aszinkron működést a saját nyelvében. Felszíni
+              szinten látja az algoritmikus bonyolultságot: felismeri, ha egy
+              brute-force megoldás teljesítményproblémához vezet, még ha
+              formális analízist nem is végez. A típusrendszert vagy a nyelv
+              konvencióit hasznosítja, nem pedig küzdeni próbál ellenük.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="mid">
+            <div class="level-label">Mid-level</div>
+            <p>
+              Tudatos adatmodellezési döntéseket hoz: a problémának megfelelő
+              struktúrát választja ahelyett, hogy az első működő megoldásnál
+              maradna. Felismeri a stack-jében megjelenő tervezési mintákat:
+              kompozíció, middleware láncok, hook/filter rendszerek, dependency
+              injection, observer minta. Az alkalmazás állapotkezelését és
+              adatfolyamat logikáját képes átlátni anélkül, hogy az
+              összekuszálódna. A rekurziót, a memoizációt és az alapvető cache
+              logikákat értelmesen alkalmazza, amikor a teljesítmény ezt
+              megkívánja.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="senior">
+            <div class="level-label">Senior</div>
+            <p>
+              Ez a kategória itt éri el a maximumát. Az informatikai
+              alapismeretek belsővé váltak, és csendben informálják a
+              döntéseket. Felismeri, ha egy teljesítményprobléma algoritmikus
+              vagy architekturális természetű. Tudja, mikor indokolt egyedi
+              megoldás, és mikor jobb egy könyvtárra hagyatkozni. A kód review
+              során az implementációs részleteken túlmenően strukturális
+              problémákat is kiszúr.
+            </p>
+          </div>
+
+          <div class="growth-section">
+            <div class="growth-title">Fejlődési jelzők</div>
+            <div class="growth-item" data-to="mid">
+              <span class="growth-arrow">Junior &#8594; Mid:</span> Már nem az
+              első működő megoldásnál áll meg, hanem megközelítések között
+              választ és meg tudja indokolni. Ez a PR leírásokban és a kód
+              review-kban látható: nemcsak azt írja le, mit csinált, hanem azt
+              is, miért.
+            </div>
+            <div class="growth-item" data-to="senior">
+              <span class="growth-arrow">Mid &#8594; Senior:</span> A mintákat
+              nem alkalmazandó receptként kezeli, hanem a jó struktúra
+              természetes következményeként látja. A review-k során
+              architekturális problémákat fog meg, nem csak felszíni
+              implementációs hibákat.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Stack domain tudás -->
+      <div class="category">
+        <div class="category-header">
+          <span class="category-number">02</span>
+          <h2 class="category-title">Tech stack domain tudás</h2>
+        </div>
+        <div class="level-cards">
+          <div class="level-card" data-level="junior">
+            <div class="level-label">Junior</div>
+            <p>
+              Oldalakat, komponenseket és layoutokat épít a csapat
+              keretrendszerében, a meglévő projekt konvencióit követve. Érti a
+              framework alapkoncepcióit (routing, template-ek, adatlekérdezés,
+              renderelési életciklus) annyira, hogy a kialakult mintákon belül
+              dolgozzon. Képes a csapat CMS rendszerével dolgozni:
+              tartalomtípusok létrehozása és szerkesztése, mezők és alapvető
+              kapcsolatok konfigurálása, illetve annak megértése, hogyan jut el
+              a tartalom a CMS-ből a frontendre. Követi a projekt
+              stílusmegoldásait és a meglévő komponens- vagy sablonmintákat.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="mid">
+            <div class="level-label">Mid-level</div>
+            <p>
+              Architekturális mikrodöntéseket önállóan hoz: renderelési
+              stratégiát, adatlekérési megközelítést és cache konfigurációt az
+              oldal tényleges igényei alapján választ, és meg tudja indokolni.
+              Új projektekhez a nulláról épít CMS konfigurációt: egyedi
+              tartalomtípusok, életciklus hook-ok vagy filterek, hozzáférési
+              jogosultságok, és egyedi API végpontok, ha az alap felületen nem
+              oldhatóak meg az igények. Érti, hogyan kommunikál a CMS az
+              adatbázissal, és hogyan írjon hatékony lekérdezéseket túlzott
+              adatlekérdezés nélkül. Magabiztosan kezeli a szokásos CMS
+              munkafolyamatokat: többnyelvű tartalom, piszkozat/publikáció,
+              médiakezelés és tartalom-kapcsolatok.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="senior">
+            <div class="level-label">Senior</div>
+            <p>
+              Ő az, akit a csapat megkeres, ha valami úgy törik el, ahogy a
+              dokumentációja nem fedi le. Érti a keretrendszer működési
+              logikáját: build folyamat, cache viselkedés, szerver oldali
+              végrehajtási modell, teljesítményprofilozás. A CMS oldalán a
+              bővítmény/plugin architektúrán tud fejleszteni, az admin felületet
+              testreszabni és verziók közötti adatmigrációt kezelni. Követi a
+              keretrendszer és a CMS kiadásait, és a változáslistákat konkrét
+              útmutatássá alakítja: "ez a kiadás azt jelenti, hogy új
+              projektekben az X-et másképp kell kezelnünk."
+            </p>
+          </div>
+
+          <div class="level-card" data-level="lead">
+            <div class="level-label">Lead</div>
+            <p>
+              A stack kanonikus projektbeállításának tulajdonosa: a kezdő repo,
+              az alapértelmezett CMS konfiguráció, a mappastruktúra konvenciók
+              és a deployment pipeline, amellyel minden új projekt indul.
+              Értékeli a keretrendszer és a CMS új funkcióit, és eldönti, mi
+              kerül ügynökségi szinten bevezetésre és mi kerül halasztásra. Ha
+              bármelyik eszköz jelentős irányváltozáson megy át, a lead tervezi
+              meg az ügynökség válaszát: időterv, migrációs stratégia, képzési
+              igények. Mindent azon a szűrőn át enged, hogy "ettől javul-e a
+              szabványos munkamenetünk?"
+            </p>
+          </div>
+
+          <div class="growth-section">
+            <div class="growth-title">Fejlődési jelzők</div>
+            <div class="growth-item" data-to="mid">
+              <span class="growth-arrow">Junior &#8594; Mid:</span> A meglévő
+              konfigurációk követése helyett maga épít konfigurációkat. A teszt
+              az, hogy képes-e egy új projekt CMS és keretrendszer struktúráját
+              a nulláról felépíteni úgy, hogy az megfelel az ügynökség
+              szabványainak.
+            </div>
+            <div class="growth-item" data-to="senior">
+              <span class="growth-arrow">Mid &#8594; Senior:</span> A helyes
+              építéstől a diagnosztizálás és döntéshozás felé lép tovább. Olyan
+              problémákat old meg, amiket mások nem tudnak, és olyan véleményt
+              formál a stack-ről, ami végül helyesnek bizonyul.
+            </div>
+            <div class="growth-item" data-to="lead">
+              <span class="growth-arrow">Senior &#8594; Lead:</span> Az egyéni
+              szakértelemtől az intézményi gondoskodás felé mozdul el. Tudása a
+              csapat eszközökben és sablonokban él, nem csupán a saját fejében.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Külső eszközök és szolgáltatások -->
+      <div class="category">
+        <div class="category-header">
+          <span class="category-number">03</span>
+          <h2 class="category-title">
+            Külső eszközök és szolgáltatások ismerete
+          </h2>
+        </div>
+        <div class="category-note">
+          Ez a kategória mid-level szinttől indul. Juniorok a már beállított
+          szolgáltatásokat használják, és nem elvárt tőlük, hogy
+          szolgáltatásokat értékeljenek vagy válasszanak.
+        </div>
+        <div class="level-cards">
+          <div class="level-card" data-level="mid">
+            <div class="level-label">Mid-level</div>
+            <p>
+              Munkatapasztalattal rendelkezik az ügynökség által gyakran
+              integrált szolgáltatásokkal: analitikai platformok, email
+              szolgáltatások, űrlapkezelő rendszerek, autentifikációs
+              szolgáltatók, CDN-ek és képoptimalizáló megoldások. Egy
+              integrációt a szolgáltatás dokumentációja alapján képes
+              megvalósítani, anélkül, hogy az API kulcsok, webhook-ok vagy SDK
+              beállítás során kézenfogva kellene vezetni. Képes felmérni, hogy
+              egy szolgáltatás árazása megfelelő-e az adott ügyfélméret számára.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="senior">
+            <div class="level-label">Senior</div>
+            <p>
+              Fejben tartja az ügynökség projektjeihez releváns szolgáltatások
+              térképét. Ha ügyféligényként felmerül a keresés, webshop,
+              időpontfoglalás, tranzakciós email vagy fizetéskezelés, reális
+              opciókat tud javasolni, kifejtve az előnyöket és hátrányokat
+              (költség, bonyolultság, vendor lock-in, kompatibilitás a
+              stack-kel), és ajánlást tesz. Mélyen érti a hosting és
+              infrastruktúra választásokat: az ügynökség alapértelmezett hosting
+              szolgáltatójának áramodelljét és korlátait, azt, mikor tartozik
+              egy projekt máshová, és hogyan kell környezeteket, előzeteseket és
+              edge/serverless függvényeket konfigurálni. Elég szolgáltatással
+              szerzett rossz tapasztalatot, hogy tudja, melyeket érdemes
+              kerülni.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="lead">
+            <div class="level-label">Lead</div>
+            <p>
+              Ez a kategória itt éri el a maximumát, de a lead szerepe kurálás
+              jellegű, nem hands-on. Karbantart egy "alapértelmezett
+              szolgáltatások" listát, amelyet a csapat használ, amíg nincs
+              konkrét ok az eltérésre. Ha egy szolgáltatás, amelyre az ügynökség
+              támaszkodik, árat változtat, funkciót megszüntet vagy
+              felvásárolják, a lead méri fel a hatást és dönti el, szükséges-e
+              migráció. Új szolgáltatásokat a lead hagyja jóvá, mielőtt
+              bekerülnének az ügynökség eszköztárába: nem minden fejlesztő vezet
+              be önállóan új külső függőséget.
+            </p>
+          </div>
+
+          <div class="growth-section">
+            <div class="growth-title">Fejlődési jelzők</div>
+            <div class="growth-item" data-to="senior">
+              <span class="growth-arrow">Mid &#8594; Senior:</span> A "meg tudom
+              csinálni az integrációt, ha megmondod melyiket használjam" helyett
+              "itt vannak a lehetőségek, én ezt választanám és ezért." A váltást
+              a végrehajtástól az ajánlástétel felé jelzi.
+            </div>
+            <div class="growth-item" data-to="lead">
+              <span class="growth-arrow">Senior &#8594; Lead:</span> A projekt
+              szintű ajánlásokból ügynökség szintű kurálás lesz. Észreveszi, ha
+              a csapat ugyanazt a szolgáltatás-kategóriát minden projekten újra
+              és újra újraértékeli, és szabványt vezet be.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Projekt támogatás -->
+      <div class="category">
+        <div class="category-header">
+          <span class="category-number">04</span>
+          <h2 class="category-title">
+            Projekt támogatás (frissítések, élő javítások, karbantartás)
+          </h2>
+        </div>
+        <div class="category-note">
+          Ez a kategória mid-level szinttől indul. Juniorok aktív fejlesztéseken
+          dolgoznak, nem már átadott projektek karbantartásán.
+        </div>
+        <div class="level-cards">
+          <div class="level-card" data-level="mid">
+            <div class="level-label">Mid-level</div>
+            <p>
+              Rutinszerű támogatási feladatokat kezel élő projekteken:
+              tartalommodell módosítások, hibajavítások, kisebb új funkciók és
+              függőség-frissítések, amelyek nem járnak breaking change-dzsel.
+              Érti a különbséget a fejlesztői branch-en végzett munka és a
+              produkciós hotfix között, és a megfelelő folyamatot követi. Képes
+              egy olyan kódbázisban tájékozódni, amelyet nem ő épített, ésszerű
+              időn belül, és célzott változtatást végezni regresszió bevezetése
+              nélkül. Ellenőrzi, milyen keretrendszer- és CMS-verzióval fut a
+              projekt, mielőtt a jelenlegi verzióhoz tartozó mintákat
+              feltételezné.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="senior">
+            <div class="level-label">Senior</div>
+            <p>
+              Proaktívan felméri az általa érintett projektek technikai
+              állapotát. Amikor egy régebbi projekthez rendelik, értékeli:
+              milyen verziókon fut, vannak-e ismert sebezhetőségek, használ-e
+              elavult mintákat, amelyek a következő főverzió-frissítésnél
+              eltörik. Frissítési ajánlásokat tesz világos indoklással: nem azt
+              mondja, hogy "ez régi," hanem hogy "ennek a verziónak három
+              hónapon belül megszűnik a biztonsági támogatása" vagy "a kliens
+              által kért funkció az aktuális verzión triviális, de ezen a
+              verzión körülményesen megoldható." Nem triviális frissítéseket
+              tervez és hajt végre: főbb CMS verzió-migrációk adat- vagy
+              sémaváltozásokkal, keretrendszer verzióváltás és összehangolt
+              függőséglánc-frissítések.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="lead">
+            <div class="level-label">Lead</div>
+            <p>
+              Az ügynökség projektportfóliójának karbantartási helyzetéért
+              felel. Látja, melyik projekt milyen verzión fut, és melyik közelít
+              kockázati küszöböket: biztonsági támogatás vége, halmozódó
+              technikai adósság, ügyfélterv, amely ütközni fog az elavult
+              infrastruktúrával. Létrehozza azt a folyamatot, ahogyan a
+              karbantartás felszínre kerül és idő kerül rá, legyen az időszakos
+              audit, nyomonkövető eszköz vagy egy egyszerű nyilvántartás.
+              Meghatározza, hogyan kommunikálják az ügyfeleknek a frissítési
+              javaslatokat, beleértve a scope-olás és költségbecslés
+              szabványait. Gondoskodik arról, hogy az ügynökség ne halmozzon fel
+              olyan projekteket, amelyekhez senki nem akar hozzányúlni, mert túl
+              messzire sodródtak az aktuális stack-től.
+            </p>
+          </div>
+
+          <div class="growth-section">
+            <div class="growth-title">Fejlődési jelzők</div>
+            <div class="growth-item" data-to="senior">
+              <span class="growth-arrow">Mid &#8594; Senior:</span> A reaktív
+              támogatásból (bejelentett hibák javítása) proaktív felmérésbe lép
+              át (felismeri, mit kellene javítani, mielőtt bejelentik). A
+              látható jel az, hogy önállóan kezd frissítési javaslatokat
+              benyújtani.
+            </div>
+            <div class="growth-item" data-to="lead">
+              <span class="growth-arrow">Senior &#8594; Lead:</span> Az egyes
+              projektek felméréséből a portfólió szintű irányításba lép.
+              Felállítja azt a rendszert, amelyik biztosítja, hogy semmi ne
+              essen ki a figyelem középpontjából, ahelyett, hogy személyesen
+              fogna meg minden problémát.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Újrafelhasználhatóság -->
+      <div class="category">
+        <div class="category-header">
+          <span class="category-number">05</span>
+          <h2 class="category-title">
+            Fejlesztett funkciók újrafelhasználhatósága
+          </h2>
+        </div>
+        <div class="category-note">
+          Ez a kategória mid-level szinttől indul. Juniorok még a működő
+          megoldások építését tanulják; az újrafelhasználhatóság ennél a
+          szintnél korai elvárás lenne.
+        </div>
+        <div class="level-cards">
+          <div class="level-card" data-level="mid">
+            <div class="level-label">Mid-level</div>
+            <p>
+              Olyan komponenseket, sablonokat és segédfüggvényeket ír, amelyek
+              egy projekten belül újrafelhasználhatóak. Nem másolja ugyanazt a
+              layout logikát vagy tartalom-struktúrát több helyre, hanem kiemeli
+              közös komponensbe. A CMS tartalomtípusait és mezőcsoportjait úgy
+              strukturálja, hogy azok kombinálhatóak legyenek, ne
+              duplikálódjanak. Ha megold egy problémát, a megoldás elég tiszta
+              ahhoz, hogy a projekten dolgozó másik fejlesztő átvezetés nélkül
+              is használni tudja. Követi a projekt konvencióit, hogy hol élnek a
+              közös kódok.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="senior">
+            <div class="level-label">Senior</div>
+            <p>
+              Projekteken átívelően gondolkodik. Ha az egyik projekten olyat
+              épít, ami visszatérő problémát old meg (egy tartalom-blokk minta,
+              egy plugin konfiguráció, egy utility az előnézet, átirányítás vagy
+              SEO metadata kezeléséhez), azt olyan formán emeli ki, hogy a
+              következő projekten is felhasználható legyen. Hozzájárul az
+              ügynökség belső újrafelhasználhatósági könyvtárához, legyen az
+              közös csomag, dokumentált recept, vagy a kezdő sablon
+              kiegészítése. A különbség a mid-level-hez képest: az
+              újrafelhasználhatóság már az induláskor tudatos, nem utólag illik
+              rá. A jövő projektjeit szem előtt tartva tervez, anélkül, hogy
+              túlbonyolítaná olyan esetekre, amelyek sosem jönnek el.
+            </p>
+          </div>
+
+          <div class="level-card" data-level="lead">
+            <div class="level-label">Lead</div>
+            <p>
+              Az újrafelhasználhatóság stratégiáját határozza meg: mit és hogyan
+              érdemes újrafelhasználhatóvá tenni. Nem mindenből kell közös
+              könyvtárat csinálni. A lead dönti el, melyek azok a minták,
+              amelyek elég stabilak a szabványosításhoz, melyek fejlődnek még és
+              inkább dokumentált receptként éljenek, és melyek túl
+              projekt-specifikusak az általánosításhoz. Karbantartja a kezdő
+              sablont és a közös eszközöket, felülvizsgálja a hozzájárulásokat,
+              hogy megbízhatóak és karbantarthatóak-e. A lead
+              újrafelhasználhatósági hozzájárulása strukturális: maga a projekt
+              architektúra úgy van tervezve, hogy az újrafelhasználhatóságot
+              segítő kódnak legyen nyilvánvaló helye és módja a jövőben
+              felmerülő projektekben.
+            </p>
+          </div>
+
+          <div class="growth-section">
+            <div class="growth-title">Fejlődési jelzők</div>
+            <div class="growth-item" data-to="senior">
+              <span class="growth-arrow">Mid &#8594; Senior:</span> A "nem
+              ismétlem magam egy projekten belül" szemléletből "észrevettem,
+              hogy minden projekten megoldjuk ezt a problémát, ezért
+              hordozhatóvá tettem" szemléletbe lép. A bizonyíték kézzelfogható:
+              egy megosztott komponens, egy dokumentált minta, egy
+              sablon-kiegészítés, amit másik fejlesztő ténylegesen használt egy
+              különböző projekten.
+            </div>
+            <div class="growth-item" data-to="lead">
+              <span class="growth-arrow">Senior &#8594; Lead:</span> Az
+              újrafelhasználhatósági elemek hozzájárulásából a rendszer
+              kurálásába lép. Meghatározza, mit tartalmaz a közös eszköztár,
+              visszavonja, ami nem húzza a súlyát, és gondoskodik arról, hogy a
+              megosztott erőforrások karban legyenek tartva és kompatibilisek
+              maradjanak az aktuális stack-kel.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function filterLevel(level) {
+        document.querySelectorAll(".level-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.level === level);
+        });
+
+        document.querySelectorAll(".level-card").forEach((card) => {
+          if (level === "all") {
+            card.classList.remove("hidden");
+          } else {
+            card.classList.toggle("hidden", card.dataset.level !== level);
+          }
+        });
+      }
+    </script>
+  </body>
 </html>
