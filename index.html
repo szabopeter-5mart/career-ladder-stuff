@@ -288,6 +288,26 @@
         color: var(--accent-lead);
       }
 
+      .review-note {
+        background: rgba(232, 164, 77, 0.06);
+        border: 1px solid rgba(232, 164, 77, 0.18);
+        border-radius: 10px;
+        padding: 18px 22px;
+        margin-top: 16px;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+        line-height: 1.7;
+      }
+
+      .review-note-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-lead);
+        margin-bottom: 8px;
+      }
+
       @keyframes fadeUp {
         from {
           opacity: 0;
@@ -613,6 +633,11 @@
             </div>
           </div>
         </div>
+
+        <div class="review-note">
+          <div class="review-note-title">Észrevétel</div>
+          A külső szolgáltatások között vannak olyanok, amelyek egyszerűen integrálhatók (pl. analitika beágyazás, alapszintű form szolgáltatás), és olyanok, amelyek összetettebb döntéshozást igényelnek (pl. fizetési rendszer, autentikáció, egyedi API integráció). Az egyszerűbb integrációk használata junior szinten is elvárható — a hangsúly a szintválasztásnál nem az integráció megvalósításán, hanem a döntéshozáson van: melyik szolgáltatást, miért, milyen trade-off-ok mentén választjuk.
+        </div>
       </div>
 
       <!-- 4. Projekt támogatás -->
@@ -784,6 +809,11 @@
               maradjanak az aktuális stack-kel.
             </div>
           </div>
+        </div>
+
+        <div class="review-note">
+          <div class="review-note-title">Észrevétel</div>
+          A projekteken átívelő újrafelhasználhatóság (senior szint) jelenleg cégen belül nincs kidolgozva — nincsenek bevett folyamatok arra, hogyan adjunk át egymásnak reusable package-eket, közös komponenseket vagy dokumentált recepteket. Ez azt jelenti, hogy a senior szintű elvárás teljesítéséhez előbb közösen ki kell építenünk ezt a kultúrát és infrastruktúrát. Ide együtt kell felnőnünk.
         </div>
       </div>
     </div>
